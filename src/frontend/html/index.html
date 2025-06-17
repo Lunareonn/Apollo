@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container" style="width: 25%">
+            <h2 class="title has-text-centered">Apollo</h2>
+            <nav class="level">
+                <div class="level-item has-text-centered">
+                    <p class="heading">Settings</p>
+                </div>
+                <div class="level-item has-text-centered">
+                    <p class="heading">About</p>
+                </div>
+                <div class="level-item has-text-centered">
+                    <p class="heading">Source</p>
+                </div>
+            </nav> 
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="column is-half is-offset-3">
+                <input class="input mb-4" type="text" placeholder="Spotify URL....">
+                <div class="box">
+                    <p class="subtitle">Logs</p>
+                    <div class="container" id="logs"></div>
+
+                    <script>
+                        const eventSource = new EventSource("/logs");
+
+                        eventSource.onmessage = function(event) {
+                            const logsDiv = document.getElementById("logs");
+                            logsDiv.innerHTML += `<p>${event.data}</p>`;
+                        };
+
+                        eventSource.onerror = function() {
+                            console.error("EventSource failed.");
+                            eventSource.close();
+                        };
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
