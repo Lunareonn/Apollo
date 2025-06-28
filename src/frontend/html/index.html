@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apollo</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="../assets/index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/displaylogs.js"></script>
+    <script src="https://kit.fontawesome.com/48a7f14439.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <section class="section">
         <div class="container" style="width: 25%">
@@ -20,33 +26,38 @@
                 <div class="level-item has-text-centered">
                     <p class="heading">Source</p>
                 </div>
-            </nav> 
+            </nav>
         </div>
     </section>
     <section class="section">
         <div class="container">
             <div class="column is-half is-offset-3">
-                <input class="input mb-4" type="text" placeholder="Spotify URL....">
-                <div class="box">
-                    <p class="subtitle">Logs</p>
-                    <div class="container" id="logs"></div>
-
-                    <script>
-                        const eventSource = new EventSource("/logs");
-
-                        eventSource.onmessage = function(event) {
-                            const logsDiv = document.getElementById("logs");
-                            logsDiv.innerHTML += `<p>${event.data}</p>`;
-                        };
-
-                        eventSource.onerror = function() {
-                            console.error("EventSource failed.");
-                            eventSource.close();
-                        };
-                    </script>
+                <div class="columns">
+                    <input class="input mb-4" type="text" placeholder="Spotify URL..."
+                        style="font-family: 'ProggyClean'"">
+                    <button class=" button ml-2" id="trigger-btn" style="height: 15%; width: 7%">
+                    <span class="icon">
+                        <i class="fas fa-download"></i>
+                    </span>
+                    </button>
                 </div>
+                <p class="subtitle has-text-centered" id="response"></p>
+                <div class="box" id="log-box" style="padding: 0;">
+                    <div id="log-toggle" class="p-3 has-white-text is-clickable is-flex is-align-items-center">
+                        <span class="icon is-small mr-2">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        <strong style="font-size: 20px;">Logs</strong>
+                    </div>
+                    <div id="log-content" class="p-3" style="display: none; max-height: 300px; overflow-y: auto;">
+                        <pre id="logs" style="white-space: pre-wrap; font-size: 0.9rem;"></pre>
+                    </div>
+                </div>
+                <script src="/assets/dropdownlogs.js"></script>
+                <script src="../assets/download.js"></script>
             </div>
         </div>
     </section>
 </body>
+
 </html>
