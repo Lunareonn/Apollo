@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "ProggyClean";
+    src: url("fonts/ProggyCleanCENerdFont-Regular.ttf");
+}
+
+* {
+    font-family: "ProggyClean";
+}
