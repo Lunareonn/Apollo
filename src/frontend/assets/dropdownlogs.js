@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (toggle && content) {
         toggle.addEventListener("click", function () {
-            content.style.display = (content.style.display === "none") ? "block" : "none";
+            content.classList.toggle("expanded")
         });
     }
 });

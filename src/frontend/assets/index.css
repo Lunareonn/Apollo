@@ -3,6 +3,19 @@
     src: url("fonts/ProggyCleanCENerdFont-Regular.ttf");
 }
 
+#log-content {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+#log-content.expanded {
+    overflow-y: scroll;
+    max-height: 300px;
+    opacity: 1;
+}
+
 * {
     font-family: "ProggyClean";
 }

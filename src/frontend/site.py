@@ -1,6 +1,6 @@
 from flask import Flask, render_template, Response, jsonify, stream_with_context
 import logging
-import backend.downloader
+from backend.downloader import start_download
 from backend.logger import log_queue, queue
 
 app = Flask(__name__, static_folder="assets", template_folder="html")
@@ -13,7 +13,7 @@ def log_message(msg):
 
 @app.route("/download", methods=["POST"])
 def download():
-    backend.downloader.song_downloader()
+    start_download()
     return jsonify({'status': 'success', 'message': "Downloading, this might take a while."})
 
 
