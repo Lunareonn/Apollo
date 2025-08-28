@@ -6,15 +6,9 @@ from backend.logger import log_queue, queue
 app = Flask(__name__, static_folder="assets", template_folder="html")
 
 
-def log_message(msg):
-    logger = logging.getLogger()
-    logger.info("hi")
-
-
 @app.route("/download", methods=["POST"])
 def download():
     data = request.get_json(silent=True) or {}
-    print("Query in @app.route:", data.get("query"))
     start_download(query=data.get("query"))
     return jsonify({'status': 'success', 'message': "Downloading, this might take a while."})
 

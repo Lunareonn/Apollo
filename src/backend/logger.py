@@ -8,7 +8,6 @@ log_queue = queue.Queue()
 class SSELogHandler(logging.Handler):
     def emit(self, record):
         log_entry = self.format(record)
-        print("emitting")
         log_queue.put(log_entry)
 
 
