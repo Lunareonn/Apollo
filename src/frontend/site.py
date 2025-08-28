@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, jsonify, stream_with_context
+from flask import Flask, render_template, Response, jsonify, stream_with_context, request
 import logging
 from backend.downloader import start_download
 from backend.logger import log_queue, queue
@@ -13,7 +13,9 @@ def log_message(msg):
 
 @app.route("/download", methods=["POST"])
 def download():
-    start_download()
+    data = request.get_json(silent=True) or {}
+    print("Query in @app.route:", data.get("query"))
+    start_download(query=data.get("query"))
     return jsonify({'status': 'success', 'message': "Downloading, this might take a while."})
 
 

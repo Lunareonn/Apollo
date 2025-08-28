@@ -5,16 +5,26 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-client_id = os.getenv("client_id")
-client_secret = os.getenv("client_secret")
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-spotdl = Spotdl(client_id=client_id, client_secret=client_secret)
+def start_download(query=None):
+    t = threading.Thread(target=_download_thread, args=(query,), daemon=True)
+    t.start()
 
+def _download_thread(query):
+    try:
+        spotdl = Spotdl(client_id=client_id, client_secret=client_secret)
 
-def start_download():
-    asyncio.run(song_download())
+        if query is None:
+            msg = "No link provided."
+            return
 
+        print("Query in _download_thread:", query)
+        print("Searching for:", query)
+        songs = spotdl.search([query])
+        spotdl.download_songs(songs)
 
-async def song_download():
-    songs = spotdl.search(['joji - test drive'])
-    spotdl.download_songs(songs)
+        msg = "Download completed successfully."
+    except Exception as e:
+        msg = f"An error occurred during download: {e}"
