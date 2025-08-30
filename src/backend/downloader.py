@@ -2,38 +2,23 @@ import logging
 import threading
 import queue as _queue
 from spotdl import Spotdl
+from backend.utils import validate_link
 from dotenv import load_dotenv
+from backend.logger import log
 import os
 
 load_dotenv()
 client_id = os.getenv("SPOTIFY_CLIENT_ID")
 client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-try:
-    from backend.logger import log_queue
-except Exception as e:
-    print(e)
-    log_queue = None
-
-print(log_queue)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("downloader")
 
 _task_queue = _queue.Queue()
 _worker_thread = None
 _worker_lock = threading.Lock()
 _worker_started = False
 
-def _log(msg):
-    logger.info(msg)
-    if log_queue:
-        try:
-            log_queue.put(msg)
-        except Exception:
-            pass
-
 def start_download(query=None):
-    # t = threading.Thread(target=_download_thread, args=(query,), daemon=True)
-    # t.start()
     global _worker_thread, _worker_started
     with _worker_lock:
         if not _worker_started:
@@ -46,23 +31,29 @@ def _worker_loop():
     try:
         spotdl = Spotdl(client_id=client_id, client_secret=client_secret)
     except Exception as e:
-        _log(f"Failed to initialize Spotdl: {e}")
+        log(f"Failed to initialize Spotdl: {e}")
         return
     
-    _log("Worker thread started.")
+    log("Worker thread started.")
 
     while True:
         task = _task_queue.get()
         try:
             if task is None:
-                _log("Downloader worker received shutdown signal.")
+                log("Worker received shutdown signal.")
                 break
 
             query = task
             if query == "" or query is None:
-                msg = "No link provided."
-                _log(msg)
+                log("No link provided.")
                 continue
+
+            is_valid_link = validate_link(query)
+            if is_valid_link is False:
+                log("Invalid link. Only spotify links are supported.")
+                continue
+            elif is_valid_link is True:
+                pass
 
             if isinstance(query, list):
                 query_list = [query]
@@ -71,15 +62,15 @@ def _worker_loop():
             else:
                 query_list = [str(query)]
 
-            _log(f"Starting download for query: {query_list}")
+            log(f"Starting download for query: {query_list}")
             try:
                 songs = spotdl.search(query_list)
                 spotdl.download_songs(songs)
                 msg = "Download completed successfully."
-                _log(msg)
+                log(msg)
             except Exception as e:
                 msg = f"An error occurred during download: {e}"
-                _log(msg)
+                log(msg)
 
         finally:
             _task_queue.task_done()
@@ -91,28 +82,3 @@ def stop_worker(wait=True):
         if wait and _worker_thread is not None:
             _worker_thread.join()
         _worker_started = False
-
-# def _download_thread(query):
-#     try:
-#         # spotdl = Spotdl(client_id=client_id, client_secret=client_secret)
-
-#         if query == "" or query is None:
-#             msg = "No link provided."
-#             logger.info(msg)
-#             if log_queue:
-#                 try:
-#                     log_queue.put(msg)
-#                 except Exception:
-#                     pass
-#             return
-
-#         songs = spotdl.search([query])
-#         spotdl.download_songs(songs)
-
-#         msg = "Download completed successfully."
-#         logger.info(msg)
-#         log_queue.put(msg)
-#     except Exception as e:
-#         msg = f"An error occurred during download: {e}"
-#         logger.info(msg)
-#         log_queue.put(msg)
