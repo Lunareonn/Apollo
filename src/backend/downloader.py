@@ -8,9 +8,6 @@ from backend.logger import log
 import os
 
 load_dotenv()
-client_id = os.getenv("SPOTIFY_CLIENT_ID")
-client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
 logger = logging.getLogger("downloader")
 
 _task_queue = _queue.Queue()
@@ -29,7 +26,7 @@ def start_download(query=None):
 
 def _worker_loop():
     try:
-        spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
+        spotdl = Spotdl(client_id=os.getenv("SPOTIFY_CLIENT_ID"), client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"), downloader_settings={
             "output": "{artists} ({album}) - {title}.{output-ext}",
             "bitrate": "128k"
         })
