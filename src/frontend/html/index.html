@@ -15,15 +15,15 @@
 <body>
     <section class="section">
         <div class="container" style="width: 25%">
-            <h2 class="title has-text-centered">Apollo</h2>
+            <h2 class="title has-text-centered animate-charcter">Apollo</h2>
             <nav class="level">
-                <div class="level-item has-text-centered">
-                    <p class="heading">Settings</p>
+                <div class="level-item has-text-centered" style="font-size: 20px;">
+                    <button class="heading" id="open-settings">Settings</button>
                 </div>
-                <div class="level-item has-text-centered">
-                    <p class="heading">About</p>
+                <div class="level-item has-text-centered" style="font-size: 20px;">
+                    <button class="heading" id="open-about">About</button>
                 </div>
-                <div class="level-item has-text-centered">
+                <div class="level-item has-text-centered" style="font-size: 20px;">
                     <p class="heading">Source</p>
                 </div>
             </nav>
@@ -52,9 +52,55 @@
                     <div id="log-content" class="p-3">
                         <pre id="logs" style="white-space: pre-wrap; font-size: 0.9rem;"></pre>
                     </div>
+
+                    <!-- About modal -->
+                    <div id="about-modal" class="modal">
+                        <div class="modal-background"></div>
+                        <div class="modal-card" style="width: 420px;">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">About Apollo</p>
+                                <button class="delete" aria-label="close" id="about-close"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <div class="content">
+                                    <h1 class="title" style="font-size: 24px;">TBA</h1>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <!-- End about modal -->
+
+                    <!-- Settings modal -->
+                    <div id="settings-modal" class="modal">
+                        <div class="modal-background"></div>
+                        <div class="modal-card" style="width: 420px;">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">Settings</p>
+                                <button class="delete" aria-label="close" id="settings-close"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <form id="settings-form">
+                                    <div class="field">
+                                        <label class="label">Download Folder</label>
+                                        <div class="control">
+                                            <input id="setting-download-folder" class="input" type="text" placeholder="e.g. {{path}}">
+                                        </div>
+                                        <p class="help" style="font-size: 16px">Path for downloaded files</p>
+                                    </div>
+                                </form>
+                            </section>
+                            <footer class="modal-card-foot">
+                                <button id="settings-save" class="button is-primary" style="margin-right:0.45rem">Save</button>
+                                <button id="settings-cancel" class="button">Cancel</button>
+                            </footer>
+                        </div>
+                    </div>
+                    <!-- End settings modal -->
                 </div>
-                <script src="/assets/dropdownlogs.js"></script>
+                <script src="../assets/dropdownlogs.js"></script>
                 <script src="../assets/download.js"></script>
+                <script src="../assets/settings-modal.js"></script>
+                <script src="../assets/about-modal.js"></script>
             </div>
         </div>
     </section>

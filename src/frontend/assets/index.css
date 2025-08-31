@@ -16,6 +16,45 @@
     opacity: 1;
 }
 
-* {
+#open-settings, #open-about {
+    color: hsl(141, 71%, 48%);
+}
+
+#open-settings:hover, #open-about:hover {
+    color: hsl(141, 67%, 71%);
+}
+
+.animate-charcter
+{
+  background-image: linear-gradient(
+    90deg,
+    #00ff0d 0%,
+    #77f346 25%,
+    #00ff80 50%,
+    #77f346 75%,
+    #00ff0d 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 2s linear infinite;
+  font-size: 36px;
+  text-shadow: 0 0 10px #00ff0d73;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+*, *::-moz-placeholder, *:-moz-placeholder, *::-webkit-input-placeholder {
+    font-family: "ProggyClean";
+}
+*:-ms-input-placeholder {
     font-family: "ProggyClean";
 }
