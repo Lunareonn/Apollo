@@ -29,7 +29,10 @@ def start_download(query=None):
 
 def _worker_loop():
     try:
-        spotdl = Spotdl(client_id=client_id, client_secret=client_secret)
+        spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
+            "output": "{artists} ({album}) - {title}.{output-ext}",
+            "bitrate": "128k"
+        })
     except Exception as e:
         log(f"Failed to initialize Spotdl: {e}")
         return
