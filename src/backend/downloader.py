@@ -66,11 +66,9 @@ def _worker_loop():
             try:
                 songs = spotdl.search(query_list)
                 spotdl.download_songs(songs)
-                msg = "Download completed successfully."
-                log(msg)
+                log("Download completed successfully.")
             except Exception as e:
-                msg = f"An error occurred during download: {e}"
-                log(msg)
+                log(f"An error occurred during download: {e}")
 
         finally:
             _task_queue.task_done()
