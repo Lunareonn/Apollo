@@ -1,3 +1,4 @@
 spotdl
 flask
 python-dotenv
+toml
