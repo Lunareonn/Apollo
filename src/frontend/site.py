@@ -2,7 +2,7 @@ from flask import Flask, render_template, Response, jsonify, stream_with_context
 import logging
 from backend.downloader import start_download
 from backend.logger import log_queue, queue
-from backend.utils import example_directory
+from backend.util import default_directory
 
 app = Flask(__name__, static_folder="assets", template_folder="html")
 
@@ -32,4 +32,4 @@ def logs():
 
 @app.route("/")
 def index():
-    return render_template("index.html", path=example_directory())
+    return render_template("index.html", path=default_directory())

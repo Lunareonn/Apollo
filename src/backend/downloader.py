@@ -2,7 +2,7 @@ import logging
 import threading
 import queue as _queue
 from spotdl import Spotdl
-from backend.utils import validate_link
+from backend.util import validate_link
 from dotenv import load_dotenv
 from backend.logger import log
 import os
@@ -65,7 +65,7 @@ def _worker_loop():
             log(f"Starting download for query: {query_list}")
             try:
                 songs = spotdl.search(query_list)
-                spotdl.download_songs(songs)
+                downloaded_songs = spotdl.download_songs(songs)
                 log("Download completed successfully.")
             except Exception as e:
                 log(f"An error occurred during download: {e}")
