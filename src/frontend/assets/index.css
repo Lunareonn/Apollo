@@ -24,6 +24,12 @@
     color: hsl(141, 67%, 71%);
 }
 
+.modal-card-head {
+    box-shadow: none !important;
+    border-bottom: 1px solid #fff;
+    height: 2rem;
+}
+
 .animate-charcter
 {
   background-image: linear-gradient(
@@ -57,4 +63,7 @@
 }
 *:-ms-input-placeholder {
     font-family: "ProggyClean";
+}
+*[type=text] {
+  font-family: "ProggyClean";
 }
