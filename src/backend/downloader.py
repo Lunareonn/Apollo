@@ -1,8 +1,9 @@
 import logging
 import threading
+import toml
 import queue as _queue
 from spotdl import Spotdl
-from backend.util import validate_link
+from backend.util import validate_link, send_warning
 from dotenv import load_dotenv
 from backend.logger import log
 import os
@@ -16,20 +17,35 @@ _worker_lock = threading.Lock()
 _worker_started = False
 
 def start_download(query=None):
+    with open(os.path.join(os.path.expanduser("~"), ".config", "apollo", "config.toml"), "r") as f:
+        config = toml.load(f)
+        client_id = config.get("secrets", {}).get("client_id", "")
+        client_secret = config.get("secrets", {}).get("client_secret", "")
+        print(client_id, client_secret)
+    if not client_id or not client_secret:
+        try:
+            send_warning("warning", "Spotify credentials are missing. Please set them in the settings.")
+        except Exception as e:
+            log(f"Failed to send warning modal: {e}")
+    
     global _worker_thread, _worker_started
     with _worker_lock:
         if not _worker_started:
-            _worker_thread = threading.Thread(target=_worker_loop, daemon=True)
+            print("Starting worker thread...")
+            _worker_thread = threading.Thread(target=_worker_loop, args=(client_id, client_secret), daemon=True)
             _worker_thread.start()
             _worker_started = True
     _task_queue.put(query)
 
-def _worker_loop():
+def _worker_loop(client_id=None, client_secret=None):
+    print("Trying to initialize Spotdl...")
     try:
-        spotdl = Spotdl(client_id=os.getenv("SPOTIFY_CLIENT_ID"), client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"), downloader_settings={
+        print(client_secret, client_id)
+        spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
             "output": "{artists} ({album}) - {title}.{output-ext}",
             "bitrate": "128k"
         })
+        print("Spotdl initialized.")
     except Exception as e:
         log(f"Failed to initialize Spotdl: {e}")
         return

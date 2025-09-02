@@ -3,7 +3,8 @@ import getpass
 import sys
 import os
 import toml
-from backend.logger import log
+import json
+from backend.logger import log, log_queue
 
 def check_config():
     if sys.platform == "linux":
@@ -32,8 +33,19 @@ def generate_config():
             config.setdefault("downloader", {})
             config["downloader"]["directory"] = default_directory()
 
+            config.setdefault("secrets", {})
+            config["secrets"]["client_id"] = ""
+            config["secrets"]["client_secret"] = ""
+
             with open(os.path.join(home_folder, ".config", "apollo", "config.toml"), "w") as f:
                 toml.dump(config, f)
+
+def send_warning(modal_name: str, message: str):
+    payload = json.dumps({"type": "modal", "modal": modal_name, "message": message})
+    try:
+        log_queue.put(payload)
+    except Exception as e:
+        log(f"Failed to send warning modal: {e}")
 
 def default_directory():
     username = getpass.getuser()
