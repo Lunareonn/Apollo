@@ -7,8 +7,8 @@
     <title>Apollo</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" href="../assets/index.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../assets/js/sse.js"></script>
+    <script src="../assets/libraries/socket.io.js"></script>
+    <script src="../assets/js/websocket.js"></script>
     <script src="https://kit.fontawesome.com/48a7f14439.js" crossorigin="anonymous"></script>
 </head>
 
@@ -34,7 +34,7 @@
             <div class="column is-half is-offset-3">
                 <div class="columns">
                     <input class="input mb-4" id="query-input" type="text" placeholder="Spotify URL..."
-                        style="font-family: 'ProggyClean'"">
+                        style="font-family: 'ProggyClean'">
                     <button class=" button ml-2" id="trigger-btn" style="height: 15%; width: 7%">
                     <span class="icon">
                         <i class="fas fa-download"></i>
@@ -51,14 +51,6 @@
                     </div>
                     <div id="log-content" class="p-3">
                         <pre id="logs" style="white-space: pre-wrap; font-size: 0.9rem;"></pre>
-                    </div>
-
-                    <!-- Warning modal -->
-                    <div id="warning-modal" class="modal">
-                        <div class="modal-background"></div>
-                        <div class="modal-card" style="width: 420px;">
-                            <section class="modal-card-body">
-                            </section>
                     </div>
 
                     <!-- About modal -->
@@ -113,14 +105,13 @@
                     </div>
                     <!-- End settings modal -->
                 </div>
-                <script src="../assets/js/dropdownlogs.js"></script>
-                <script src="../assets/js/download.js"></script>
-                <script src="../assets/js/settings-modal.js"></script>
-                <script src="../assets/js/about-modal.js"></script>
-                <script src="../assets/js/warning-modal.js"></script>
             </div>
         </div>
     </section>
+    <script src="../assets/js/dropdownlogs.js"></script>
+    <script src="../assets/js/download.js"></script>
+    <script src="../assets/js/settings-modal.js"></script>
+    <script src="../assets/js/about-modal.js"></script>
 </body>
 
 </html>

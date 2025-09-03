@@ -1,17 +1,19 @@
 from flask import Flask, render_template, Response, jsonify, stream_with_context, request
+from flask_socketio import SocketIO, send, emit
 import logging
 from backend.downloader import start_download
 from backend.logger import log_queue, queue
 from backend.util import default_directory
 
 app = Flask(__name__, static_folder="assets", template_folder="html")
+socketio = SocketIO(app)
 
 
-@app.route("/download", methods=["POST"])
-def download():
-    data = request.get_json(silent=True) or {}
-    start_download(query=data.get("query"))
-    return jsonify({'status': 'success', 'message': "Downloading, this might take a while."})
+@socketio.on("download")
+def handle_download(data):
+    query = data.get("query")
+    start_download(query=query)
+    emit('status', {'status': 'success', 'message': "Downloading, this might take a while."})
 
 
 @app.route("/logs")
