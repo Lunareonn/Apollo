@@ -11,10 +11,10 @@ socketio = SocketIO(app)
 
 @socketio.on("download")
 def handle_download(data):
+    print("signal got")
     query = data.get("query")
     start_download(query=query)
     emit('status', {'status': 'success', 'message': "Downloading, this might take a while."})
-
 
 @app.route("/logs")
 def logs():
