@@ -25,27 +25,25 @@ def start_download(query=None):
     if not client_id or not client_secret:
         try:
             send_warning("warning", "Spotify credentials are missing. Please set them in the settings.")
+            log("Spotify credentials are missing. Please set them in the settings.")
         except Exception as e:
             log(f"Failed to send warning modal: {e}")
     
     global _worker_thread, _worker_started
     with _worker_lock:
         if not _worker_started:
-            print("Starting worker thread...")
             _worker_thread = threading.Thread(target=_worker_loop, args=(client_id, client_secret), daemon=True)
             _worker_thread.start()
             _worker_started = True
     _task_queue.put(query)
 
 def _worker_loop(client_id=None, client_secret=None):
-    print("Trying to initialize Spotdl...")
     try:
-        print(client_secret, client_id)
+        print(client_id, client_secret)
         spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
-            "output": "{artists} ({album}) - {title}.{output-ext}",
+            "output": "{artists} - {title} ({album}).{output-ext}",
             "bitrate": "128k"
         })
-        print("Spotdl initialized.")
     except Exception as e:
         log(f"Failed to initialize Spotdl: {e}")
         return
@@ -55,32 +53,28 @@ def _worker_loop(client_id=None, client_secret=None):
     while True:
         task = _task_queue.get()
         try:
-            if task is None:
-                log("Worker received shutdown signal.")
-                break
-
             query = task
             if query == "" or query is None:
                 log("No link provided.")
                 continue
 
             is_valid_link = validate_link(query)
-            if is_valid_link is False:
+            if is_valid_link is False: 
                 log("Invalid link. Only spotify links are supported.")
                 continue
             elif is_valid_link is True:
                 pass
 
-            if isinstance(query, list):
-                query_list = [query]
-            elif isinstance(query, (list, tuple)):
-                query_list = list(query)
-            else:
-                query_list = [str(query)]
+            # if isinstance(query, list):
+            #     query_list = [query]
+            # elif isinstance(query, (list, tuple)):
+            #     query_list = list(query)
+            # else:
+            #     query_list = [str(query)]
 
-            log(f"Starting download for query: {query_list}")
+            log(f"Starting download for query: {query}")
             try:
-                songs = spotdl.search(query_list)
+                songs = spotdl.search([query])
                 downloaded_songs = spotdl.download_songs(songs)
                 log("Download completed successfully.")
             except Exception as e:
