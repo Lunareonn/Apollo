@@ -3,9 +3,12 @@ import threading
 import json
 import queue as _queue
 from spotdl import Spotdl
+from frontend.extensions import socketio
 from backend.util import validate_link, send_warning
+from backend.organizer import create_folder_structure
 from dotenv import load_dotenv
 from backend.logger import log
+import traceback
 import os
 
 load_dotenv()
@@ -24,7 +27,7 @@ def start_download(query=None):
         print(client_id, client_secret)
     if not client_id or not client_secret:
         try:
-            send_warning("warning", "Spotify credentials are missing. Please set them in the settings.")
+            socketio.emit("warning", "Spotify credentials are missing. Please set them in the settings.")
             log("Spotify credentials are missing. Please set them in the settings.")
             return
         except Exception as e:
@@ -78,6 +81,7 @@ def _worker_loop(client_id=None, client_secret=None):
             try:
                 songs = spotdl.search([query])
                 downloaded_songs = spotdl.download_songs(songs)
+                create_folder_structure(downloaded_songs)
                 log("Download completed successfully.")
             except Exception as e:
                 log(f"An error occurred during download: {e}")
