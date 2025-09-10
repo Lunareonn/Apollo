@@ -1,3 +1,5 @@
+import { socket } from "./websocket.js"
+
 (() => {
     const modal = document.getElementById('settings-modal');
     const openBtn = document.getElementById('open-settings');
@@ -8,7 +10,9 @@
     const saveBtn = document.getElementById('settings-save');
 
     const inputs = {
-        downloadFolder: document.getElementById('setting-download-folder')
+        downloadFolder: document.getElementById('setting-download-folder'),
+        client_id: document.getElementById('setting-client-id'),
+        client_secret: document.getElementById('setting-client-secret')
     };
 
     const SETTINGS_KEY = 'apollo_settings_v1';
@@ -22,25 +26,29 @@
     }
 
     function loadSettings() {
-        const raw = localStorage.getItem(SETTINGS_KEY);
-        if (!raw) return;
-        try {
-            const s = JSON.parse(raw);
-            if (s.downloadFolder) inputs.downloadFolder.value = s.downloadFolder;
-            if (s.maxConcurrent) inputs.maxConcurrent.value = s.maxConcurrent;
-            inputs.verboseLogs.checked = !!s.verboseLogs;
-        } catch (e) {
-            console.warn('Failed to parse settings', e);
-        }
+        fetch('/get-settings', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            inputs.downloadFolder.value = data.directory || '';
+            inputs.client_id.value = data.client_id || '';
+            inputs.client_secret.value = data.client_secret || '';
+        })
     }
 
     function saveSettings() {
-        const s = {
-            downloadFolder: inputs.downloadFolder.value || '',
-            maxConcurrent: parseInt(inputs.maxConcurrent.value, 10) || 1,
-            verboseLogs: !!inputs.verboseLogs.checked
-        };
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+        fetch('/save-settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                directory: inputs.downloadFolder.value,
+                client_id: inputs.client_id.value,
+                client_secret: inputs.client_secret.value
+            })
+        })
     }
 
     openBtn && openBtn.addEventListener('click', (e) => {
@@ -66,7 +74,11 @@
     saveBtn && saveBtn.addEventListener('click', (e) => {
         e.preventDefault();
         saveSettings();
-        closeModal();
+    });
+
+    // save on Enter
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') saveSettings();
     });
 
     // Optional: expose settings for other scripts

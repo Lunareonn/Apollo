@@ -39,6 +39,20 @@ def generate_config():
             with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "w") as f:
                 f.write(config)
 
+
+def save_config(settings: dict):
+    if sys.platform == "linux":
+        home_folder = os.path.join(os.path.expanduser("~"))
+        with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "w") as f:
+            json.dump(settings, f, indent=4)
+
+def fetch_config():
+    if sys.platform == "linux":
+        home_folder = os.path.join(os.path.expanduser("~"))
+        with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "r") as f:
+            config = json.load(f)
+            return config
+
 def send_warning(modal_name: str, message: str):
     payload = json.dumps({"type": "modal", "modal": modal_name, "message": message})
     try:
