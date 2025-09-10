@@ -1,5 +1,4 @@
-from flask import Flask, render_template, Response, jsonify, stream_with_context, request
-from flask_socketio import send, emit
+from flask import Flask, render_template, jsonify, request
 from backend.downloader import start_download
 from backend.util import default_directory, save_config, fetch_config
 from frontend.extensions import socketio
