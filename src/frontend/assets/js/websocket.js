@@ -1,4 +1,4 @@
-var socket = io();
+export const socket = io();
 
 const logsDiv = document.getElementById("logs");
 
