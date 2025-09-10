@@ -1,28 +1,47 @@
-import os
 import re
+import os
+import json
+import traceback
+from pathlib import Path
 from backend.logger import log
+from backend.util import default_directory
 from spotdl.utils import metadata
 
 def sanitize(string):
     pattern = r"[\"*/:<>?\\]"
-    replaced_quotes = re.sub(r'"', "'", string)
+    replaced_quotes = re.sub(r'"', "'", str(string))
     sanitized = re.sub(pattern, "-", replaced_quotes)
 
-    return sanitized
+    return Path(sanitized)
 
 def create_folder_structure(songs):
+    home_folder = os.path.expanduser("~")
+    with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "r") as f:
+        config = json.load(f)
+        path = config["directory"]
+        fallback_path = default_directory()
+
     for song in songs:
-        log("Sanitizing filename:", song[1])
+        log(f"Sanitizing filename: {song[1]}")
         sanitized = sanitize(song[1])
         try:
-            log("Fetching metadata for:", sanitized)
+            log(f"Fetching metadata for: {sanitized}")
             song_metadata = metadata.get_file_metadata(
                 sanitized, id3_separator=", ")
         except AttributeError as e:
-            log(f"AttributeError! {e}")
-            continue
+            log(f"AttributeError: {e}")
+            traceback.print_exc()
+            raise AttributeError
         except OSError as e:
-            log(f"OSError! {e}")
-            continue
+            log(f"OSError: {e}")
+            traceback.print_exc()
+            raise AttributeError
 
-        # Finish later. TODO: Fetch directory for downloaded songs from config. Also fix errors
+        if path is None or path == "":
+            path = fallback_path
+
+        directory = os.path.join(path, sanitize(song_metadata["album_artist"]), sanitize(song_metadata["album_name"]))
+        log(f"Creating directory: {directory}")
+        os.makedirs(directory, exist_ok=True)
+        log(f"Moving file {song[1]} to {directory}")
+        os.rename(song[1], os.path.join(directory, song[1]))
