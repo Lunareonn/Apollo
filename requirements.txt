@@ -2,4 +2,3 @@ spotdl
 flask
 flask-socketio
 python-dotenv
-toml

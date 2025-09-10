@@ -2,14 +2,13 @@ import re
 import getpass
 import sys
 import os
-import toml
 import json
 from backend.logger import log, log_queue
 
 def check_config():
     if sys.platform == "linux":
         home_folder = os.path.join(os.path.expanduser("~"))
-        if os.path.isfile(os.path.join(home_folder, ".config", "apollo", "config.toml")):
+        if os.path.isfile(os.path.join(home_folder, ".config", "apollo", "config.json")):
             return True
         else:
             return False
@@ -30,15 +29,15 @@ def generate_config():
             if not os.path.isdir(os.path.join(home_folder, ".config", "apollo")):
                 os.makedirs(os.path.join(home_folder, ".config", "apollo"))
 
-            config.setdefault("downloader", {})
-            config["downloader"]["directory"] = default_directory()
+            dconfig = {
+                "directory": default_directory(),
+                "client_id": "",
+                "client_secret": ""
+            }
+            config = json.dumps(dconfig, indent=4)
 
-            config.setdefault("secrets", {})
-            config["secrets"]["client_id"] = ""
-            config["secrets"]["client_secret"] = ""
-
-            with open(os.path.join(home_folder, ".config", "apollo", "config.toml"), "w") as f:
-                toml.dump(config, f)
+            with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "w") as f:
+                f.write(config)
 
 def send_warning(modal_name: str, message: str):
     payload = json.dumps({"type": "modal", "modal": modal_name, "message": message})

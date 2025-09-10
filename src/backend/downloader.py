@@ -1,6 +1,6 @@
 import logging
 import threading
-import toml
+import json
 import queue as _queue
 from spotdl import Spotdl
 from backend.util import validate_link, send_warning
@@ -17,17 +17,19 @@ _worker_lock = threading.Lock()
 _worker_started = False
 
 def start_download(query=None):
-    with open(os.path.join(os.path.expanduser("~"), ".config", "apollo", "config.toml"), "r") as f:
-        config = toml.load(f)
-        client_id = config.get("secrets", {}).get("client_id", "")
-        client_secret = config.get("secrets", {}).get("client_secret", "")
+    with open(os.path.join(os.path.expanduser("~"), ".config", "apollo", "config.json"), "r") as f:
+        config = json.load(f)
+        client_id = config["client_id"]
+        client_secret = config["client_secret"]
         print(client_id, client_secret)
     if not client_id or not client_secret:
         try:
             send_warning("warning", "Spotify credentials are missing. Please set them in the settings.")
             log("Spotify credentials are missing. Please set them in the settings.")
+            return
         except Exception as e:
             log(f"Failed to send warning modal: {e}")
+            return
     
     global _worker_thread, _worker_started
     with _worker_lock:
