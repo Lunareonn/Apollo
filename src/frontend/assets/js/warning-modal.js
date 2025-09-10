@@ -1,3 +1,5 @@
+import { socket } from "./websocket.js"
+
 (() => {
     const modal = document.getElementById('warning-modal');
 
@@ -26,11 +28,9 @@
         content.appendChild(bodyEl);
     }
 
-    document.addEventListener('sse-message', (ev) => {
-        const { json } = ev.detail || {};
-        if (json && json.type === 'modal' && json.modal === 'warning') {
-            bodyEl.textContent = json.message || '';
-            openModal();
-        }
+    socket.on("warning", function(data) {
+        console.log("signal got")
+        bodyEl.innerHTML = `<p>${data}</p>`;
+        openModal();
     });
 })();
