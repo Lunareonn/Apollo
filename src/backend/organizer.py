@@ -22,20 +22,26 @@ def create_folder_structure(songs):
         fallback_path = default_directory()
 
     for song in songs:
-        log(f"Sanitizing filename: {song[1]}")
+        if song[1] is None:
+            log("A song download failed. Skipping.")
+            continue
         sanitized = sanitize(song[1])
         try:
             log(f"Fetching metadata for: {sanitized}")
             song_metadata = metadata.get_file_metadata(
-                sanitized, id3_separator=", ")
+                sanitized, id3_separator="/")
         except AttributeError as e:
             log(f"AttributeError: {e}")
             traceback.print_exc()
-            raise AttributeError
+            raise e
         except OSError as e:
             log(f"OSError: {e}")
             traceback.print_exc()
-            raise AttributeError
+            raise e
+        except Exception as e:
+            log(f"Unexpected error while fetching metadata: {e}")
+            traceback.print_exc()
+            raise e
 
         if path is None or path == "":
             path = fallback_path
