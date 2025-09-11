@@ -70,13 +70,6 @@ def _worker_loop(client_id=None, client_secret=None):
             elif is_valid_link is True:
                 pass
 
-            # if isinstance(query, list):
-            #     query_list = [query]
-            # elif isinstance(query, (list, tuple)):
-            #     query_list = list(query)
-            # else:
-            #     query_list = [str(query)]
-
             log(f"Starting download for query: {query}")
             try:
                 songs = spotdl.search([query])
