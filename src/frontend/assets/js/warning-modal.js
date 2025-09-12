@@ -30,7 +30,7 @@ import { socket } from "./websocket.js"
 
     socket.on("warning", function(data) {
         console.log("signal got")
-        bodyEl.innerHTML = `<p>${data}</p>`;
+        bodyEl.innerHTML = `<p class="warning">${data}</p>`;
         openModal();
     });
 })();
