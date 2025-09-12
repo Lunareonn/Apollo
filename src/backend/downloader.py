@@ -4,7 +4,7 @@ import json
 import queue as _queue
 from spotdl import Spotdl
 from frontend.extensions import socketio
-from backend.util import validate_link, send_warning
+from backend.util import validate_link, fetch_config
 from backend.organizer import create_folder_structure
 from dotenv import load_dotenv
 from backend.logger import log
@@ -20,10 +20,9 @@ _worker_lock = threading.Lock()
 _worker_started = False
 
 def start_download(query=None):
-    with open(os.path.join(os.path.expanduser("~"), ".config", "apollo", "config.json"), "r") as f:
-        config = json.load(f)
-        client_id = config["client_id"]
-        client_secret = config["client_secret"]
+    config = fetch_config()
+    client_id = config["client_id"]
+    client_secret = config["client_secret"]
     if not client_id or not client_secret:
         try:
             socketio.emit("warning", "Spotify credentials are missing. Please set them in the settings.")
