@@ -80,15 +80,4 @@ import { socket } from "./websocket.js"
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') saveSettings();
     });
-
-    // Optional: expose settings for other scripts
-    window.apolloSettings = {
-        get: () => {
-            try {
-                return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {};
-            } catch {
-                return {};
-            }
-        }
-    };
 })();
