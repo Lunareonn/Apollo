@@ -53,13 +53,6 @@ def fetch_config():
             config = json.load(f)
             return config
 
-def send_warning(modal_name: str, message: str):
-    payload = json.dumps({"type": "modal", "modal": modal_name, "message": message})
-    try:
-        log_queue.put(payload)
-    except Exception as e:
-        log(f"Failed to send warning modal: {e}")
-
 def default_directory():
     username = getpass.getuser()
     if sys.platform == "win32":
