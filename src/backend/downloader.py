@@ -24,7 +24,6 @@ def start_download(query=None):
         config = json.load(f)
         client_id = config["client_id"]
         client_secret = config["client_secret"]
-        print(client_id, client_secret)
     if not client_id or not client_secret:
         try:
             socketio.emit("warning", "Spotify credentials are missing. Please set them in the settings.")
@@ -44,7 +43,6 @@ def start_download(query=None):
 
 def _worker_loop(client_id=None, client_secret=None):
     try:
-        print(client_id, client_secret)
         spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
             "output": "{artists} - {title} ({album}).{output-ext}",
             "bitrate": "128k"

@@ -8,7 +8,6 @@ log_queue = queue.Queue()
 class SocketIOHandler(logging.Handler):
     def emit(self, record):
         log_entry = self.format(record)
-        print("emitting:", log_entry)
         socketio.emit("message", log_entry)
 
 
