@@ -4,7 +4,7 @@ import json
 import traceback
 from pathlib import Path
 from backend.logger import log
-from backend.util import default_directory
+from backend.util import default_directory, fetch_config
 from spotdl.utils import metadata
 
 def sanitize(string):
@@ -15,11 +15,9 @@ def sanitize(string):
     return Path(sanitized)
 
 def create_folder_structure(songs):
-    home_folder = os.path.expanduser("~")
-    with open(os.path.join(home_folder, ".config", "apollo", "config.json"), "r") as f:
-        config = json.load(f)
-        path = config["directory"]
-        fallback_path = default_directory()
+    config = fetch_config()
+    path = config["directory"]
+    fallback_path = default_directory()
 
     for song in songs:
         if song[1] is None:
