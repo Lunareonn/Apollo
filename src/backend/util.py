@@ -3,7 +3,21 @@ import getpass
 import sys
 import os
 import json
+import tempfile
 from backend.logger import log, log_queue
+
+def check_if_running():
+    pid_file = os.path.join(tempfile.gettempdir(), "apollo.pid")
+    if os.path.isfile(pid_file):
+        try:
+            print("already running")
+            return True
+        except OSError:
+            print("not running")
+            return False
+    else:
+        print("no pid file")
+        return False
 
 def check_config():
     home_folder = os.path.join(os.path.expanduser("~"))
