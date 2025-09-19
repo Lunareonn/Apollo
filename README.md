@@ -7,7 +7,7 @@
 <p>Apollo is an extension to SpotDL, providing a WebGUI using Flask, and extra features such as automatic file organization</p>
 <br>
 
-# Build from source
+## Build from source
 ```
 # Clone the repository
 git clone https://github.com/Lunareonn/apollo.git
@@ -29,7 +29,7 @@ pyinstaller main.spec
 ```
 <br>
 
-# Usage
+## Usage
 <p>Apollo is a portable application, so all you have to do to start it is to run the executable file you either downloaded or built.<br>
 The Apollo GUI will be automatically opened on your default browser. If for some reason it doesn't open, you can access it by going to either <code>127.0.0.1:5000</code> or <code>localhost:5000</code>
 <br>
