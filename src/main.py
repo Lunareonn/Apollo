@@ -9,7 +9,6 @@ def exit_handler():
     pid_file = os.path.join(tempfile.gettempdir(), "apollo.pid")
     if os.path.isfile(pid_file):
         os.remove(pid_file)
-        print("deleted pid file")
 
 def main():
     is_running = check_if_running()

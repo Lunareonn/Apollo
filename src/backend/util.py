@@ -10,13 +10,10 @@ def check_if_running():
     pid_file = os.path.join(tempfile.gettempdir(), "apollo.pid")
     if os.path.isfile(pid_file):
         try:
-            print("already running")
             return True
         except OSError:
-            print("not running")
             return False
     else:
-        print("no pid file")
         return False
 
 def check_config():
