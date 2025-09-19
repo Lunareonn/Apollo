@@ -1,10 +1,20 @@
 from flask import Flask, render_template, jsonify, request
+from engineio.async_drivers import threading
 from backend.downloader import start_download
 from backend.util import default_directory, save_config, fetch_config
 from frontend.extensions import socketio
+import sys
+import os
 
-app = Flask(__name__, static_folder="assets", template_folder="html")
-socketio.init_app(app)
+if getattr(sys, "frozen", False):
+    template_folder = os.path.join(sys._MEIPASS, "html")
+    static_folder = os.path.join(sys._MEIPASS, "assets")
+else:
+    template_folder = "html"
+    static_folder = "assets"
+
+app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
+socketio.init_app(app, async_mode="threading")
 
 @socketio.on("download")
 def handle_download(query):
