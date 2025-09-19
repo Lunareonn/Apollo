@@ -27,7 +27,6 @@ pip install -r requirements.txt
 # Build using pyinstaller
 pyinstaller main.spec
 ```
-<br>
 
 ## Usage
 <p>Apollo is a portable application, so all you have to do to start it is to run the executable file you either downloaded or built.<br>
