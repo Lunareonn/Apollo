@@ -30,7 +30,7 @@ pyinstaller main.spec
 
 ## Usage
 <p>Apollo is a portable application, so all you have to do to start it is to run the executable file you either downloaded or built.<br>
-The Apollo GUI will be automatically opened on your default browser. If for some reason it doesn't open, you can access it by going to either <code>127.0.0.1:5000</code> or <code>localhost:5000</code>
+The Apollo GUI will be automatically opened in your default browser. If for some reason it doesn't open, you can access it by going to either <code>http://127.0.0.1:5000</code> or <code>http://localhost:5000</code>
 <br>
 <br>
 Before usage, you will need to set your Spotify developer Client id and Client secret</p>
