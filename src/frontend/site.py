@@ -22,7 +22,7 @@ def handle_download(query):
 @app.route("/save-settings", methods=["POST"])
 def save_settings():
     save_config(request.get_json())
-    return jsonify({"status": "success"})
+    return jsonify({"status": "Saved successfully"})
 
 @app.route("/get-settings", methods=["GET"])
 def get_settings():

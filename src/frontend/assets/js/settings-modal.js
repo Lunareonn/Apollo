@@ -8,6 +8,7 @@ import { socket } from "./websocket.js"
         document.getElementById('settings-cancel')
     ];
     const saveBtn = document.getElementById('settings-save');
+    const savedText = document.getElementById('settings-saved-status')
 
     const inputs = {
         downloadFolder: document.getElementById('setting-download-folder'),
@@ -18,6 +19,7 @@ import { socket } from "./websocket.js"
     const SETTINGS_KEY = 'apollo_settings_v1';
 
     function openModal() {
+        savedText.textContent = '';
         modal.classList.add('is-active');
     }
 
@@ -48,6 +50,9 @@ import { socket } from "./websocket.js"
                 client_id: inputs.client_id.value,
                 client_secret: inputs.client_secret.value
             })
+        }).then(response => response.json()).then(data => {
+            console.log(data);
+            savedText.textContent = data.status;
         })
     }
 
