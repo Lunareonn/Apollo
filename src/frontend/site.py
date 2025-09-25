@@ -1,5 +1,4 @@
 from flask import Flask, render_template, jsonify, request
-from engineio.async_drivers import threading
 from backend.downloader import start_download
 from backend.util import default_directory, save_config, fetch_config
 from frontend.extensions import socketio

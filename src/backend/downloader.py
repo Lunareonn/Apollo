@@ -1,6 +1,5 @@
 import logging
 import threading
-import json
 import queue as _queue
 from spotdl import Spotdl
 from frontend.extensions import socketio
@@ -8,8 +7,6 @@ from backend.util import validate_link, fetch_config
 from backend.organizer import create_folder_structure
 from dotenv import load_dotenv
 from backend.logger import log
-import traceback
-import os
 
 load_dotenv()
 logger = logging.getLogger("downloader")

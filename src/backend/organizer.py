@@ -1,6 +1,5 @@
 import re
 import os
-import json
 import traceback
 from pathlib import Path
 from backend.logger import log
