@@ -44,7 +44,8 @@ def _worker_loop(client_id=None, client_secret=None):
     try:
         spotdl = Spotdl(client_id=client_id, client_secret=client_secret, downloader_settings={
             "output": "{artists} - {title} ({album}).{output-ext}",
-            "bitrate": "128k"
+            "bitrate": "128k",
+            "lyrics_providers": ""
         })
     except Exception as e:
         log(f"Failed to initialize Spotdl: {e}")
