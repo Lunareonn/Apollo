@@ -75,7 +75,7 @@
 
                     <div id="settings-modal" class="modal">
                         <div class="modal-background"></div>
-                        <div class="modal-card" style="width: 420px;">
+                        <div class="modal-card" style="width: 680px;">
                             <header class="modal-card-head" style="box-shadow: none !important;border-bottom: 1px solid #fff">
                                 <p class="modal-card-title">Settings</p>
                                 <button class="delete" aria-label="close" id="settings-close"></button>
@@ -97,6 +97,20 @@
                                         </div>
                                         <p class="help" style="font-size: 16px">Path for downloaded files</p>
                                     </div>
+                                    <div class="title" style="font-size:24px">Advanced Settings</div>
+                                    <div class="field">
+                                        <label class="label">Minimum Silence Length (ms)</label>
+                                        <div class="control">
+                                            <input id="setting-min-silence-len" class="input" type="number" placeholder="e.g. 1000", value="1000">
+                                        </div>
+                                        <p class="help" style="font-size: 16px">The minimum length of a silence to be used for a split. Measured in ms.</p>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Silence Threshold (dB)</label>
+                                        <div class="control">
+                                            <input id="setting-silence-thresh" class="input" type="number" placeholder="e.g. -50", value="-50">
+                                        </div>
+                                        <p class="help" style="font-size: 16px">The upper bound for how quiet is considered silent. Measured in dB.</p>
                                 </form>
                             </section>
                             <footer class="modal-card-foot">

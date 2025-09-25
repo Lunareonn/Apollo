@@ -39,7 +39,9 @@ def generate_config():
         dconfig = {
             "directory": default_directory(),
             "client_id": "",
-            "client_secret": ""
+            "client_secret": "",
+            "min_silence_len": "1000",
+            "silence_thresh": "-50"
         }
         if sys.platform == "linux":
             if not os.path.isdir(os.path.join(home_folder, ".config", "apollo")):

@@ -72,6 +72,6 @@
 *:-ms-input-placeholder {
     font-family: "ProggyClean";
 }
-*[type=text] {
+*[type=text], *[type=number] {
   font-family: "ProggyClean";
 }

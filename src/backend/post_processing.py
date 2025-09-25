@@ -1,10 +1,17 @@
 from pydub import AudioSegment, silence
+from backend.logger import log
+from backend.util import fetch_config
 
 def trim_silence(filepath):
+    config = fetch_config()
+    min_silence_len = config["min_silence_len"]
+    silence_thresh = config["silence_thresh"]
+    log(f"Trimming silence from {filepath}")
     audio = AudioSegment.from_file(filepath, format="mp3")
-    silent_ranges = silence.detect_silence(audio, min_silence_len=1000, silence_thresh=-50, seek_step=1)
+    silent_ranges = silence.detect_silence(audio, min_silence_len=min_silence_len, silence_thresh=silence_thresh, seek_step=1)
     # Return original file is no silence is found
     if not silent_ranges:
+        log("No silence detected, skipping trimming.")
         return filepath
     
     # Sort silence ranges
