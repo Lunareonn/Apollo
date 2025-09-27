@@ -43,7 +43,7 @@ def _worker_loop(client_id=None, client_secret=None):
             "output": "{artists} - {title} ({album}).{output-ext}",
             "bitrate": "128k",
             "lyrics_providers": "",
-            "audio_providers": "youtube-music"
+            "audio_providers": ["youtube-music"]
         })
     except Exception as e:
         log(f"Failed to initialize Spotdl: {e}")
